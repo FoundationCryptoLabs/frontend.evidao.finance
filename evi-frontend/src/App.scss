@@ -1,0 +1,17 @@
+// Always Override default variables before the import
+$body-bg: #282a36;
+$body-color: #f8f8f2;
+$primary: #bd93f9;
+$secondary: #bd93f9;
+$success: #50fa7b;
+$info: #8be9fd;
+$warning: #ff5555;
+$danger: #ffb86c;     
+
+$white: #f8f8f2;
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+.App {
+  text-align: center;
+}
