@@ -11,12 +11,95 @@ $warning: #ff5555;
 $danger: #ffb86c;
 $white: #f8f8f2;
 
+$light-purple: #6272a4;
+
 // Fonts
-$font-family-sans-serif: "Dosis", Roboto, sans-serif;
+$font-family-sans-serif: "Lato", Roboto, sans-serif;
+$font-size-base: 1rem;
+$h1-font-size: $font-size-base * 4;
+
+// Media Queries
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+// Sane defaults
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Dosis", Roboto, sans-serif;
+}
 
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
 
+// Bootstrap Class Overrides
+.btn {
+  padding: 0.5rem 1rem;
+}
+
+// MAIN APP
 .App {
   text-align: center;
+}
+
+// LANDING PAGE
+.navbar {
+  position: fixed;
+  justify-content: end;
+  width: 100%;
+  padding: 2rem;
+}
+
+.navbarLinks {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  font-size: 1.25rem;
+  font-family: "Dosis", Roboto, sans-serif;
+  margin: 0;
+  &:hover {
+    a,
+    button {
+      color: $light-purple;
+    }
+  }
+  .navbarItem {
+    margin-right: 4rem;
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      color: $primary;
+    }
+    button {
+      padding: 0.5rem 2rem;
+    }
+    button:hover {
+      font-weight: 600;
+    }
+  }
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("./assets/images/background.png");
+  background-size: cover;
+  box-shadow: inset 0px 80px 70px 20px #0000007a;
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+  }
 }
