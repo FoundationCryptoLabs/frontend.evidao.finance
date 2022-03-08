@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/bootstrap": "^5.1.9",
     "@types/date-fns": "^2.6.0"
   }
 }
