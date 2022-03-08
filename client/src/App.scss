@@ -78,10 +78,26 @@ footer {
 }
 
 .navbar {
-  position: fixed;
-  justify-content: end;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
   width: 100%;
   padding: 2rem;
+  .navbar-brand {
+    img {
+      width: 10rem;
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    .navbar-collapse {
+      justify-content: end;
+    }
+    .navbarToggler {
+      display: none;
+    }
+  }
 }
 
 .navbarLinks {
@@ -177,6 +193,12 @@ footer {
       svg {
         font-size: 2rem;
       }
+    }
+    @include media-breakpoint-up("md") {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include media-breakpoint-up("lg") {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 }

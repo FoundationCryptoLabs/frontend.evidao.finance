@@ -1,7 +1,16 @@
 import { format, parse } from "date-fns";
-import React from "react";
-import { FaDiscord, FaGithub, FaMedium, FaTwitter } from "react-icons/fa";
-import logo from "../../assets/images/logo.png";
+import React, { useEffect, useState } from "react";
+import {
+  FaDiscord,
+  FaGithub,
+  FaHamburger,
+  FaMedium,
+  FaTwitter,
+} from "react-icons/fa";
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import xbtcLogo from "../../assets/images/logo.png";
+import eviLogo from "../../assets/images/evi_logo.png";
+import { Collapse } from "bootstrap";
 
 type Props = {};
 
@@ -54,29 +63,56 @@ export const LandingPage = (props: Props) => {
     },
   ];
 
+  const [navbarOpen, setNavbarOpen] = useState(false);
+
+  useEffect(() => {
+    const collapsible = document.getElementById("landingPageNav");
+    if (collapsible) {
+      var bsCollapse = new Collapse(collapsible, { toggle: false });
+      navbarOpen ? bsCollapse.show() : bsCollapse.hide();
+    }
+  }, [navbarOpen, setNavbarOpen]);
+
   return (
     <>
-      <nav className="navbar sticky-top">
-        <ul className="navbarLinks">
-          <li className="navbarItem">
-            <a href="">Home</a>
-          </li>
-          <li className="navbarItem">
-            <a href="">The Project</a>
-          </li>
-          <li className="navbarItem">
-            <a href="">Blog</a>
-          </li>
-          <li className="navbarItem">
-            <button className="btn btn-outline-primary">Sign Up</button>
-          </li>
-        </ul>
+      <nav className="navbar navbar-expand-lg">
+        <a className="navbar-brand" href="#">
+          <img src={eviLogo} alt="logo" />
+        </a>
+        <button
+          className="navbarToggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#landingPageNav"
+          aria-controls="landingPageNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={() => setNavbarOpen((state) => !state)}
+        >
+          <HiOutlineMenuAlt3 />
+        </button>
+        <div className="collapse navbar-collapse" id="landingPageNav">
+          <ul className="navbarLinks navbar-nav">
+            <li className="navbarItem">
+              <a href="">Home</a>
+            </li>
+            <li className="navbarItem">
+              <a href="#features">The Project</a>
+            </li>
+            <li className="navbarItem">
+              <a href="#community">Community</a>
+            </li>
+            <li className="navbarItem">
+              <a href="#blog">Blog</a>
+            </li>
+          </ul>
+        </div>
       </nav>
       <section className="hero">
         <div className="container">
           <div className="row justify-content-center mb-4">
             <div className="col-8 col-md-6 col-lg-4">
-              <img src={logo} alt="" />
+              <img src={xbtcLogo} alt="" />
             </div>
           </div>
           <h1 className="mb-4">Introducing xBTC.</h1>
@@ -104,13 +140,13 @@ export const LandingPage = (props: Props) => {
           </div>
         </div>
       </section>
-      <section className="features">
+      <section className="features" id="features">
         <h1>Features</h1>
         <hr />
         <div className="container">
           <div className="row">
             <div className="col-md-6 col-lg-3 image">
-              <img src={logo} alt="Financial Freedom" />
+              <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 col-lg-9 description">
               <div className="title">True financial freedom</div>
@@ -121,7 +157,7 @@ export const LandingPage = (props: Props) => {
           </div>
           <div className="row">
             <div className="col-md-6 col-lg-3 image">
-              <img src={logo} alt="Financial Freedom" />
+              <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 col-lg-9 description">
               <div className="title">Stable Value appreciation</div>
@@ -132,7 +168,7 @@ export const LandingPage = (props: Props) => {
           </div>
           <div className="row">
             <div className="col-md-6 col-lg-3 image">
-              <img src={logo} alt="Financial Freedom" />
+              <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 col-lg-9 description">
               <div className="title">Automated Governance</div>
@@ -143,7 +179,7 @@ export const LandingPage = (props: Props) => {
           </div>
           <div className="row">
             <div className="col-md-6 col-lg-3 image">
-              <img src={logo} alt="Financial Freedom" />
+              <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 col-lg-9 description">
               <div className="title">Bitcoin Backed</div>
@@ -166,9 +202,9 @@ export const LandingPage = (props: Props) => {
       </section>
       <section className="tagline">
         <div className="container">
-          <div className="row">
+          <div className="row align-items-center">
             <div className="col-md-6">
-              <img src={logo} alt="Financial Freedom" />
+              <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
             <div className="col-md-6">
               <div className="title">
@@ -180,7 +216,7 @@ export const LandingPage = (props: Props) => {
           </div>
         </div>
       </section>
-      <section className="community">
+      <section className="community" id="community">
         <h1>Community</h1>
         <hr />
         <div className="container">
@@ -207,7 +243,7 @@ export const LandingPage = (props: Props) => {
           </div>
         </div>
       </section>
-      <section className="blogFeature">
+      <section className="blogFeature" id="blog">
         <h1>Blog Posts</h1>
         <hr />
         <div className="container">
