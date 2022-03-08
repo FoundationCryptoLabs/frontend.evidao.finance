@@ -1,7 +1,7 @@
 // Always Override default variables before the import
 
 // Theme
-$body-bg: #282a36;
+$body-bg: #3a4063;
 $body-color: #f8f8f2;
 $primary: #bd93f9;
 $secondary: #bd93f9;
@@ -15,6 +15,7 @@ $light-purple: #6272a4;
 
 // Fonts
 $font-family-sans-serif: "Lato", Roboto, sans-serif;
+$header-font-family: "Dosis", Roboto, sans-serif;
 $font-size-base: 1rem;
 $h1-font-size: $font-size-base * 4;
 
@@ -35,7 +36,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Dosis", Roboto, sans-serif;
+  font-family: $header-font-family;
 }
 
 // Import Bootstrap and its default variables
@@ -52,6 +53,30 @@ h6 {
 }
 
 // LANDING PAGE
+section,
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 0 3rem 0;
+  &:nth-child(2n):not(.hero) {
+    background-color: $white;
+    color: $body-bg;
+  }
+  h1 {
+    margin-bottom: 0;
+    font-weight: 700;
+  }
+  hr {
+    width: 2rem;
+    height: 0.25rem;
+    text-align: center;
+    border: 0;
+    border-top: 0.25rem solid $primary;
+    margin-bottom: 2rem;
+  }
+}
+
 .navbar {
   position: fixed;
   justify-content: end;
@@ -64,7 +89,7 @@ h6 {
   align-items: center;
   list-style: none;
   font-size: 1.25rem;
-  font-family: "Dosis", Roboto, sans-serif;
+  font-family: $header-font-family;
   margin: 0;
   &:hover {
     a,
@@ -98,8 +123,96 @@ h6 {
   background-image: url("./assets/images/background.png");
   background-size: cover;
   box-shadow: inset 0px 80px 70px 20px #0000007a;
+  img {
+    width: 100%;
+  }
   .buttons {
     display: flex;
     justify-content: space-around;
+  }
+}
+
+.features {
+  .row:not(:last-child) {
+    margin-bottom: 4rem;
+  }
+  .description {
+    font-size: 1.25rem;
+  }
+  .image {
+    margin-bottom: 1rem;
+    img {
+      width: 75%;
+    }
+  }
+}
+
+.tagline {
+  font-size: 1.25rem;
+  img {
+    width: 100%;
+  }
+}
+
+.title {
+  font-family: $header-font-family;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.community {
+  .links {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-row-gap: 2rem;
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: $white;
+      padding: 1rem;
+      transition: all 0.1s ease 0s;
+      background-color: rgba(0, 0, 0, 0);
+      svg {
+        font-size: 2rem;
+      }
+    }
+  }
+}
+
+.blogFeature {
+  .blogItems {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-row-gap: 3rem;
+    grid-column-gap: 3rem;
+    margin-bottom: 4rem;
+    .blogItem {
+      background-color: $body-bg;
+      padding: 0.75rem;
+      a {
+        text-decoration: none;
+        color: $body-bg;
+      }
+      &:hover {
+        h4 {
+          text-decoration: underline;
+          color: $primary;
+        }
+      }
+      img {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      h4 {
+        font-weight: 700;
+        transition: color 0.2s ease;
+      }
+      .postData {
+        padding: 1.5rem 0.75rem;
+        background: #fff;
+      }
+    }
   }
 }
