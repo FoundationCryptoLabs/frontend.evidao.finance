@@ -14,8 +14,21 @@ import { Collapse } from "bootstrap";
 
 type Props = {};
 
+type IBlogPost = {
+  title: string;
+  pubDate: string;
+  link: string;
+  guid: string;
+  author: string;
+  thumbnail: string;
+  description: string;
+  content: string;
+  enclosure: {};
+  categories: string[];
+};
+
 export const LandingPage = (props: Props) => {
-  const posts = [
+  const posts2 = [
     {
       title: "The Stablecoin to End All Stablecoins — xBTC",
       pubDate: "2022-03-08 10:03:34",
@@ -64,6 +77,8 @@ export const LandingPage = (props: Props) => {
   ];
 
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [blogLoading, setBlogLoading] = useState(true);
+  const [posts, setPosts] = useState<IBlogPost[] | []>([]);
 
   useEffect(() => {
     const collapsible = document.getElementById("landingPageNav");
@@ -72,6 +87,21 @@ export const LandingPage = (props: Props) => {
       navbarOpen ? bsCollapse.show() : bsCollapse.hide();
     }
   }, [navbarOpen, setNavbarOpen]);
+
+  useEffect(() => {
+    const getBlogPosts = async () => {
+      const res = await fetch(
+        "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fevidao.medium.com%2Ffeed"
+      );
+      const data: { feed: any; items: IBlogPost[]; status: string } =
+        await res.json();
+      if (data.items?.length) {
+        setPosts(data.items);
+        setBlogLoading(false);
+      }
+    };
+    getBlogPosts();
+  }, []);
 
   return (
     <>
@@ -248,24 +278,26 @@ export const LandingPage = (props: Props) => {
         <hr />
         <div className="container">
           <div className="blogItems">
-            {posts.map((post) => {
-              const date = parse(
-                post.pubDate,
-                "yyyy-MM-dd HH:mm:ss",
-                new Date()
-              );
-              return (
-                <div className="blogItem" key={post.guid}>
-                  <a href={post.link} target="_blank">
-                    <img src={post.thumbnail} alt={post.title} />
-                    <div className="postData">
-                      <h4>{post.title}</h4>
-                      {format(date, "dd MMM, yyyy")}
+            {blogLoading
+              ? "Loading blog posts..."
+              : posts.map((post) => {
+                  const date = parse(
+                    post.pubDate,
+                    "yyyy-MM-dd HH:mm:ss",
+                    new Date()
+                  );
+                  return (
+                    <div className="blogItem" key={post.guid}>
+                      <a href={post.link} target="_blank">
+                        <img src={post.thumbnail} alt={post.title} />
+                        <div className="postData">
+                          <h4>{post.title}</h4>
+                          {format(date, "dd MMM, yyyy")}
+                        </div>
+                      </a>
                     </div>
-                  </a>
-                </div>
-              );
-            })}
+                  );
+                })}
           </div>
           <div className="col-12">
             <a
