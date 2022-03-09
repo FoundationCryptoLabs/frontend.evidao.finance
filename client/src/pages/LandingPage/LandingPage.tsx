@@ -1,11 +1,11 @@
 import { Collapse } from "bootstrap";
-import { format, parse, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { FaDiscord, FaGithub, FaMedium, FaTwitter } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import eviLogo from "../../assets/images/evi_logo.png";
 import xbtcLogo from "../../assets/images/logo.png";
-import { parse as rssParser } from "rss-to-json";
+import { ReactComponent as Logo } from "../../assets/images/xbtc_logo.svg";
 
 type Props = {};
 
@@ -136,7 +136,8 @@ export const LandingPage = (props: Props) => {
         <div className="container">
           <div className="row justify-content-center mb-4">
             <div className="col-8 col-md-6 col-lg-4">
-              <img src={xbtcLogo} alt="" />
+              {/* <img src={xbtcLogo} alt="" /> */}
+              <Logo />
             </div>
           </div>
           <h1 className="mb-4">Introducing xBTC.</h1>
@@ -168,50 +169,50 @@ export const LandingPage = (props: Props) => {
         <h1>Features</h1>
         <hr />
         <div className="container">
-          <div className="row">
+          <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
               <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
-            <div className="col-md-6 col-lg-9 description">
+            <div className="col-md-6 offset-lg-1 description">
               <div className="title">True financial freedom</div>
               Leverage​ your Bitcoin​ assets​ to​ generate​ stable xBTC​, a new
               asset class that maintains purchasing power stability
               algorithmically, independent of fiat currency depreciation.
             </div>
           </div>
-          <div className="row">
+          <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
               <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
-            <div className="col-md-6 col-lg-9 description">
+            <div className="col-md-6 offset-lg-1 description">
               <div className="title">Stable Value appreciation</div>
               Solves the twin problems of inflation of current stable assets
               (USDC, DAI, RAI), as well as high volatility in appreciating
               assets (BTC).
             </div>
           </div>
-          <div className="row">
+          <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
               <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
-            <div className="col-md-6 col-lg-9 description">
+            <div className="col-md-6 offset-lg-1 description">
               <div className="title">Automated Governance</div>
               We follow the principle of governance minimisation, and focus on
               making important protocol decisions via algorithms rather than
               people wherever possible.
             </div>
           </div>
-          <div className="row">
+          <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
               <img src={xbtcLogo} alt="Financial Freedom" />
             </div>
-            <div className="col-md-6 col-lg-9 description">
+            <div className="col-md-6 offset-lg-1 description">
               <div className="title">Bitcoin Backed</div>
               xBTC is backed only by bitcoin, the largest, oldest, most secure
               and most valuable digital asset in existence.
             </div>
           </div>
-          <div className="row">
+          <div className="row align-items-center justify-content-center">
             <div className="col-12">
               <a
                 href="https://github.com/FoundationCryptoLabs/XSS/blob/main/README.md"
@@ -283,7 +284,9 @@ export const LandingPage = (props: Props) => {
                   return (
                     <div className="blogItem" key={post.guid}>
                       <a href={post.url} target="_blank">
-                        {img_tag && <img src={img_tag} alt={post.title} />}
+                        <div className="imgContainer">
+                          {img_tag && <img src={img_tag} alt={post.title} />}
+                        </div>
                         <div className="postData">
                           <h4>{post.title}</h4>
                           {format(date, "dd MMM, yyyy")}
@@ -297,7 +300,7 @@ export const LandingPage = (props: Props) => {
             <a
               href="https://evidao.medium.com/"
               target="_blank"
-              className="btn btn-outline-primary"
+              className="btn btn-primary"
             >
               View All
             </a>
