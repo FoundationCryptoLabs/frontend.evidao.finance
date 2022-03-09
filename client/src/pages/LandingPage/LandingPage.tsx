@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react";
 import { FaDiscord, FaGithub, FaMedium, FaTwitter } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import eviLogo from "../../assets/images/evi_logo.svg";
-import xbtcLogo from "../../assets/images/logo.png";
 import feature1 from "../../assets/images/feature-1.svg";
 import feature2 from "../../assets/images/feature-2.svg";
 import feature4 from "../../assets/images/feature-4.svg";
+import xbtcLogo from "../../assets/images/logo.png";
 import { ReactComponent as Logo } from "../../assets/images/xbtc_logo.svg";
+import { Collapsible } from "../../Components/Collapsible/Collapsible";
 
 type Props = {};
 
@@ -158,12 +159,12 @@ export const LandingPage = (props: Props) => {
               Github Project
             </a>
             <a
-              href="https://github.com/FoundationCryptoLabs/XSS/blob/main/README.mdhttp://www,git"
+              href="https://github.com/FoundationCryptoLabs/XSS/tree/governance/Docs"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline-primary"
             >
-              Watch the video
+              Read the Docs
             </a>
           </div>
         </div>
@@ -313,7 +314,73 @@ export const LandingPage = (props: Props) => {
       <section className="faq">
         <h1>FAQ</h1>
         <hr />
-        <div className="container"></div>
+        <div className="container">
+          <Collapsible title="What is xBTC?">
+            xBTC is designed to be the ideal monetary asset. It combines the
+            short-term stability of USD with the long term value appreciation of
+            Bitcoin, to form the first stable yet appreciating asset. This is in
+            contrast with all current ‘stable’ assets, with depreciate YoY,
+            often by 5-10% or more.
+          </Collapsible>
+          <Collapsible title="How does xBTC work?">
+            xBTC relies on a redemption rate algorithm that ensures collateral
+            sufficiency while maximising value appreciation. Thus, you can
+            expect the redemption rate (and thus price) of xBTC to slowly rise
+            in USD terms, without any significant downward volatility.
+          </Collapsible>
+          <Collapsible title="What can xBTC be used for?">
+            xBTC fulfils all the goals of money - medium of exchange, unit of
+            account, and store of value - better than all existing monetary
+            assets. By utilising xBTC as a unit of account instead of USD,
+            businesses can be assured that the value of invoices paid by clients
+            will not go down over time in purchasing power terms. By utilising
+            xBTC as a store of value, holders can effectively expose themselves
+            to the long term value appreciation of Bitcoin, without risking
+            value loss due to short term fluctuations and high volatility. By
+            using xBTC as a medium of exchange, users can benefit from all the
+            advantages of smart contract based money, including programmed
+            payments, automated dispute resolution, and on-chain investment.
+          </Collapsible>
+          <Collapsible title="How much appreciation can I expect from my xBTC?">
+            Backtests show that annual xBTC appreciation can vary between 20% to
+            70% in USD terms, depending on bitcoin price action. Roughly, you
+            can definitely expect xBTC appreciation to outpace peak USD
+            inflation, which is currently nearly 12% in leading metro cities.
+          </Collapsible>
+          <Collapsible title="How can I mint xBTC?">
+            xBTC can be borrowed by depositing Bitcoin in the required
+            collateral ratio (currently 150%). Borrowed xBTC accrues a small
+            interest - this can be set to positive or negative interest. When
+            xBTC is repaid, the initially locked bitcoin collateral is released.
+            This can currently be done on testnet by directly interacting with
+            the contract. A collateralisation dashboard to facilitate this is
+            coming soon, alongside the Mainnet launch!
+          </Collapsible>
+          <Collapsible title="How can I buy xBTC?">
+            For people using xBTC as an investment, it can be bought directly on
+            any DEX on the RSK network, similar to other ERC20 tokens.
+          </Collapsible>
+          <Collapsible title="How can I redeem xBTC?">
+            xBTC can be redeemed for the present redemption rate, either by
+            directly calling the redeem function on the smart contract, or via
+            our xBTC redemption dashboard (coming soon).
+          </Collapsible>
+          <Collapsible title="When does xBTC go live?">
+            xBTC is currently deployed on RSK testnet, and is undergoing audits.
+            You can expect it to launch in early April!
+          </Collapsible>
+          <Collapsible title="Can xBTC have a negative interest rate?">
+            We’re exploring the possibility of negative interest rates for
+            borrowing xBTC, to encourage early users to mint xBTC. This is to
+            account for the fact that xBTC is designed to appreciate in real
+            terms - thus when somebody borrows 1 xBTC and decides to return 1
+            xBTC an year later, he will have to pay more in real terms (and in
+            fiat terms) after accounting for the value appreciation. Adding a
+            positive interest rate on top of this may discourage borrowing -
+            hence negative interest, to compensate partly for the rising real
+            value of the debt.
+          </Collapsible>
+        </div>
       </section>
       <footer>(c) Foundation Crypto Labs, 2022.</footer>
     </>
