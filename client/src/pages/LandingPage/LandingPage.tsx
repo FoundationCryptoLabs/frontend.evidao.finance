@@ -3,8 +3,11 @@ import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { FaDiscord, FaGithub, FaMedium, FaTwitter } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
-import eviLogo from "../../assets/images/evi_logo.png";
+import eviLogo from "../../assets/images/evi_logo.svg";
 import xbtcLogo from "../../assets/images/logo.png";
+import feature1 from "../../assets/images/feature-1.svg";
+import feature2 from "../../assets/images/feature-2.svg";
+import feature4 from "../../assets/images/feature-4.svg";
 import { ReactComponent as Logo } from "../../assets/images/xbtc_logo.svg";
 
 type Props = {};
@@ -135,7 +138,7 @@ export const LandingPage = (props: Props) => {
       <section className="hero">
         <div className="container">
           <div className="row justify-content-center mb-4">
-            <div className="col-8 col-md-6 col-lg-4">
+            <div className="col-8 col-md-6 col-lg-3">
               {/* <img src={xbtcLogo} alt="" /> */}
               <Logo />
             </div>
@@ -171,7 +174,7 @@ export const LandingPage = (props: Props) => {
         <div className="container">
           <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
-              <img src={xbtcLogo} alt="Financial Freedom" />
+              <img src={feature1} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 offset-lg-1 description">
               <div className="title">True financial freedom</div>
@@ -182,7 +185,7 @@ export const LandingPage = (props: Props) => {
           </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
-              <img src={xbtcLogo} alt="Financial Freedom" />
+              <img src={feature2} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 offset-lg-1 description">
               <div className="title">Stable Value appreciation</div>
@@ -193,7 +196,7 @@ export const LandingPage = (props: Props) => {
           </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
-              <img src={xbtcLogo} alt="Financial Freedom" />
+              <img src={eviLogo} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 offset-lg-1 description">
               <div className="title">Automated Governance</div>
@@ -204,7 +207,7 @@ export const LandingPage = (props: Props) => {
           </div>
           <div className="row align-items-center justify-content-center">
             <div className="col-md-6 col-lg-3 image">
-              <img src={xbtcLogo} alt="Financial Freedom" />
+              <img src={feature4} alt="Financial Freedom" />
             </div>
             <div className="col-md-6 offset-lg-1 description">
               <div className="title">Bitcoin Backed</div>
@@ -306,6 +309,11 @@ export const LandingPage = (props: Props) => {
             </a>
           </div>
         </div>
+      </section>
+      <section className="faq">
+        <h1>FAQ</h1>
+        <hr />
+        <div className="container"></div>
       </section>
       <footer>(c) Foundation Crypto Labs, 2022.</footer>
     </>

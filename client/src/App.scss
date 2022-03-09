@@ -77,17 +77,21 @@ footer {
   }
 }
 
+footer {
+  padding: 2rem 0 1rem 0;
+}
+
 .navbar {
   position: absolute;
   top: 0;
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: center;
   width: 100%;
   padding: 2rem;
   .navbar-brand {
     img {
-      width: 10rem;
+      width: 6rem;
     }
   }
   @include media-breakpoint-up(lg) {
@@ -117,6 +121,7 @@ footer {
     margin-right: 4rem;
     a {
       text-decoration: none;
+      font-weight: 700;
     }
     a:hover {
       color: $primary;
