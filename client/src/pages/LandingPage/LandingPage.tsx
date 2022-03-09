@@ -1,30 +1,21 @@
-import { format, parse } from "date-fns";
-import React, { useEffect, useState } from "react";
-import {
-  FaDiscord,
-  FaGithub,
-  FaHamburger,
-  FaMedium,
-  FaTwitter,
-} from "react-icons/fa";
-import { HiOutlineMenuAlt3 } from "react-icons/hi";
-import xbtcLogo from "../../assets/images/logo.png";
-import eviLogo from "../../assets/images/evi_logo.png";
 import { Collapse } from "bootstrap";
+import { format, parse, parseISO } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { FaDiscord, FaGithub, FaMedium, FaTwitter } from "react-icons/fa";
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import eviLogo from "../../assets/images/evi_logo.png";
+import xbtcLogo from "../../assets/images/logo.png";
+import { parse as rssParser } from "rss-to-json";
 
 type Props = {};
 
 type IBlogPost = {
   title: string;
-  pubDate: string;
-  link: string;
+  date_published: string;
+  url: string;
   guid: string;
-  author: string;
-  thumbnail: string;
-  description: string;
-  content: string;
-  enclosure: {};
-  categories: string[];
+  author: { name: string };
+  content_html: string;
 };
 
 export const LandingPage = (props: Props) => {
@@ -91,10 +82,13 @@ export const LandingPage = (props: Props) => {
   useEffect(() => {
     const getBlogPosts = async () => {
       const res = await fetch(
-        "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fevidao.medium.com%2Ffeed"
+        "https://cors-anywhere.herokuapp.com/https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Fevidao.medium.com%2Ffeed"
       );
-      const data: { feed: any; items: IBlogPost[]; status: string } =
-        await res.json();
+      // const res = await rssParser(
+      //   "https://cors-anywhere.herokuapp.com/https://evidao.medium.com/feed",
+      //   {}
+      // );
+      const data: { items: IBlogPost[] } = await res.json();
       if (data.items?.length) {
         setPosts(data.items);
         setBlogLoading(false);
@@ -281,15 +275,15 @@ export const LandingPage = (props: Props) => {
             {blogLoading
               ? "Loading blog posts..."
               : posts.map((post) => {
-                  const date = parse(
-                    post.pubDate,
-                    "yyyy-MM-dd HH:mm:ss",
-                    new Date()
-                  );
+                  const date = parseISO(post.date_published);
+                  const img_tag =
+                    post.content_html.match(
+                      /\<figure><img.+?src=\"(.+?)\" /
+                    )?.[1] || "";
                   return (
                     <div className="blogItem" key={post.guid}>
-                      <a href={post.link} target="_blank">
-                        <img src={post.thumbnail} alt={post.title} />
+                      <a href={post.url} target="_blank">
+                        {img_tag && <img src={img_tag} alt={post.title} />}
                         <div className="postData">
                           <h4>{post.title}</h4>
                           {format(date, "dd MMM, yyyy")}
