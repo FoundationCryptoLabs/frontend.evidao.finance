@@ -159,6 +159,9 @@ export const LandingPage = (props: Props) => {
             <li className="navbarItem">
               <a href="#blog">Blog</a>
             </li>
+            <li className="navbarItem">
+              <a href="#faq">FAQ</a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -185,7 +188,7 @@ export const LandingPage = (props: Props) => {
               Github Project
             </a>
             <a
-              href="https://github.com/FoundationCryptoLabs/XSS/tree/governance/Docs"
+              href="https://github.com/FoundationCryptoLabs/XSS/blob/governance/Docs/xBTC%20-%20Technical%20Documentation%20(2).pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline-primary"
@@ -245,7 +248,7 @@ export const LandingPage = (props: Props) => {
           <div className="row align-items-center justify-content-center">
             <div className="col-12">
               <a
-                href="https://github.com/FoundationCryptoLabs/XSS/blob/main/README.md"
+                href="https://github.com/FoundationCryptoLabs/XSS/blob/governance/Docs/zBTC-stablecoin-system.pdf"
                 target="_blank"
                 className="btn btn-outline-primary"
               >
@@ -337,7 +340,7 @@ export const LandingPage = (props: Props) => {
           </div>
         </div>
       </section>
-      <section className="faq">
+      <section className="faq" id="faq">
         <h1>FAQ</h1>
         <hr />
         <div className="container">
@@ -345,7 +348,7 @@ export const LandingPage = (props: Props) => {
             xBTC is designed to be the ideal monetary asset. It combines the
             short-term stability of USD with the long term value appreciation of
             Bitcoin, to form the first stable yet appreciating asset. This is in
-            contrast with all current ‘stable’ assets, with depreciate YoY,
+            contrast with all current ‘stable’ assets, which depreciate YoY,
             often by 5-10% or more.
           </Collapsible>
           <Collapsible title="How does xBTC work?">
