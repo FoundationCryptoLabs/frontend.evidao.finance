@@ -15,11 +15,15 @@ type Props = {};
 
 type IBlogPost = {
   title: string;
-  date_published: string;
-  url: string;
+  pubDate: string;
+  link: string;
   guid: string;
-  author: { name: string };
-  content_html: string;
+  author: string;
+  thumbnail: string;
+  description: string;
+  content: string;
+  enclosure: {};
+  categories: string[];
 };
 
 export const LandingPage = (props: Props) => {
@@ -86,8 +90,11 @@ export const LandingPage = (props: Props) => {
   useEffect(() => {
     const getBlogPosts = async () => {
       const res = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Fevidao.medium.com%2Ffeed"
+        "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fevidao.medium.com%2Ffeed"
       );
+      // const res = await fetch(
+      //   "https://cors-anywhere.herokuapp.com/https://www.toptal.com/developers/feed2json/convert?url=https%3A%2F%2Fevidao.medium.com%2Ffeed"
+      // );
       // const res = await rssParser(
       //   "https://cors-anywhere.herokuapp.com/https://evidao.medium.com/feed",
       //   {}
@@ -98,6 +105,25 @@ export const LandingPage = (props: Props) => {
         setBlogLoading(false);
       }
     };
+    // (function () {
+    //   var cors_api_host = "cors-anywhere.herokuapp.com";
+    //   var cors_api_url = "https://" + cors_api_host + "/";
+    //   var slice = [].slice;
+    //   var origin = window.location.protocol + "//" + window.location.host;
+    //   var open = XMLHttpRequest.prototype.open;
+    //   XMLHttpRequest.prototype.open = function () {
+    //     var args = slice.call<any, any[], any>(arguments);
+    //     var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+    //     if (
+    //       targetOrigin &&
+    //       targetOrigin[0].toLowerCase() !== origin &&
+    //       targetOrigin[1] !== cors_api_host
+    //     ) {
+    //       args[1] = cors_api_url + args[1];
+    //     }
+    //     return open.apply(this, args);
+    //   };
+    // })();
     getBlogPosts();
   }, []);
 
@@ -280,16 +306,16 @@ export const LandingPage = (props: Props) => {
             {blogLoading
               ? "Loading blog posts..."
               : posts.map((post) => {
-                  const date = parseISO(post.date_published);
+                  const date = parseISO(post.pubDate);
                   const img_tag =
-                    post.content_html.match(
-                      /\<figure><img.+?src=\"(.+?)\" /
-                    )?.[1] || "";
+                    post.content.match(/\<figure><img.+?src=\"(.+?)\" /)?.[1] ||
+                    "";
                   return (
                     <div className="blogItem" key={post.guid}>
-                      <a href={post.url} target="_blank">
+                      <a href={post.link} target="_blank">
                         <div className="imgContainer">
-                          {img_tag && <img src={img_tag} alt={post.title} />}
+                          {/* {img_tag && <img src={img_tag} alt={post.title} />} */}
+                          <img src={post.thumbnail} alt={post.title} />
                         </div>
                         <div className="postData">
                           <h4>{post.title}</h4>
