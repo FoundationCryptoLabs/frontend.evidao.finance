@@ -9,6 +9,7 @@ import { theme } from "theme";
 import { RSKProvider } from "context/rskContext";
 import "./App.css";
 import { CssBaseline } from "@mui/material";
+import DefaultLayout from "layouts/DefaultLayout/DefaultLayout";
 
 function App() {
   return (
@@ -38,7 +39,9 @@ const AppContent = () => {
                     <Component />
                   </ProtectedRoute>
                 ) : (
-                  <Component />
+                  <DefaultLayout>
+                    <Component />
+                  </DefaultLayout>
                 )
               }
             />

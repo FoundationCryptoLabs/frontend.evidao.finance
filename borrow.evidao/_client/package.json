@@ -24,15 +24,20 @@
     "react": "^17.0.2",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
     "react-scripts": "4.0.3",
+    "react-toastify": "^9.0.2",
     "redux-persist": "^6.0.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4",
     "web3": "^1.7.3"
+  },
+  "devDependencies": {
+    "react-error-overlay": "6.0.9"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -57,5 +62,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "overrides": {
+    "react-error-overlay": "6.0.9"
   }
 }

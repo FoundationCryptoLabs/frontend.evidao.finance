@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.rlogin-modal-header {
+  display: none;
+}
+
+.rlogin-providers-injected > [disabled] {
+  display: none;
+}
+
+.rlogin-providers-wrapper > :last-child {
+  justify-content: center;
+}
+
+.rlogin-providers-wrapper > :last-child > :not(:last-child) {
+  display: none;
+}

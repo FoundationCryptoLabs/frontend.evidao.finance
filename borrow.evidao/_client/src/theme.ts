@@ -17,4 +17,11 @@ export const theme = createTheme({
       default: "#353741",
     },
   },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: { color: "#eeeeee" },
+      },
+    },
+  },
 });

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import Web3 from "web3";
 import RLogin from "@rsksmart/rlogin";
+import { toast } from "react-toastify";
 
 const rpcUrls = {
   30: "https://public-node.rsk.co",
@@ -33,13 +34,14 @@ type RSKProviderProps = { children: React.ReactNode };
 
 interface IRSKContext {
   account: string | undefined;
-  balance: number | undefined;
+  balance: string | undefined;
   fetchBalance: (account: string) => Promise<void>;
   resetBalance: () => void;
   handleLogin: () => void;
   handleLogout: (response: any) => void;
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  web3: Web3 | null;
 }
 
 const RSKContext = createContext<IRSKContext | undefined>(undefined);
@@ -53,7 +55,9 @@ export const RSKProvider = ({ children }: RSKProviderProps) => {
 };
 
 const useBalance = () => {
-  const [balance, setBalance] = useState<number | undefined>(() => {
+  const [web3, setWeb3] = useState<null | Web3>(null);
+
+  const [balance, setBalance] = useState<string | undefined>(() => {
     const rawData = localStorage.getItem("rsk");
     if (rawData) {
       const data = JSON.parse(rawData);
@@ -83,14 +87,16 @@ const useBalance = () => {
   const handleLogin = () => {
     rLogin
       .connect()
-      .then((response: any) => {
+      .then(async (response: any) => {
         // set a local variable for the response:
         const provider = response.provider;
 
         // Use ethQuery to get the user's account and the chainId
-        const web3 = new Web3(provider);
-        console.log(web3.defaultAccount);
-        setAccount(web3.defaultAccount);
+        const web3Obj = new Web3(provider);
+        setWeb3(web3Obj);
+        const accounts = await web3Obj.eth.getAccounts();
+        setAccount(accounts[0]);
+        fetchBalance(accounts[0]);
 
         // Listen to the events emitted by the wallet. If changing account, remove the listeners
         // below and connect again. If disconnect or change chains, then logout.
@@ -101,7 +107,15 @@ const useBalance = () => {
           provider.removeAllListeners && provider.removeAllListeners();
           handleLogin();
         });
-        provider.on("chainChanged", () => handleLogout(response));
+        provider.on("chainChanged", () => {
+          toast.error(
+            `Please make sure that you're connected to the Harmony ${
+              process.env.REACT_APP_FRONTEND_NETWORK || "Testnet"
+            }`
+          );
+
+          handleLogout(response);
+        });
         provider.on("disconnect", () => handleLogout(response));
       })
       // catch an error and if there is a message display it. Closing WalletConnect without a
@@ -126,10 +140,10 @@ const useBalance = () => {
 
   const fetchBalance = useCallback(
     async (account: string) => {
-      // const balance = await
-      setBalance(0);
+      const bal = await web3?.eth.getBalance(account);
+      setBalance(bal);
     },
-    [setBalance]
+    [setBalance, web3]
   );
 
   const resetBalance = () => {
@@ -158,6 +172,7 @@ const useBalance = () => {
     setLoggedIn,
     handleLogin,
     handleLogout,
+    web3,
   };
 };
 
