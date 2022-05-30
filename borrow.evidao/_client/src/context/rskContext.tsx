@@ -1,3 +1,4 @@
+import Contracts from "contracts/contracts.json";
 import React, {
   createContext,
   useContext,
@@ -6,6 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import Web3 from "web3";
+import { Contract } from "web3-eth-contract";
 import RLogin from "@rsksmart/rlogin";
 import { toast } from "react-toastify";
 
@@ -34,7 +36,7 @@ type RSKProviderProps = { children: React.ReactNode };
 
 interface IRSKContext {
   account: string | undefined;
-  balance: string | undefined;
+  balance: IBalance | null;
   fetchBalance: (account: string) => Promise<void>;
   resetBalance: () => void;
   handleLogin: () => void;
@@ -42,6 +44,12 @@ interface IRSKContext {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   web3: Web3 | null;
+  coin: Contract | null;
+  cdp: Contract | null;
+}
+interface IBalance {
+  rbtc?: string;
+  xbtc?: string;
 }
 
 const RSKContext = createContext<IRSKContext | undefined>(undefined);
@@ -56,8 +64,11 @@ export const RSKProvider = ({ children }: RSKProviderProps) => {
 
 const useBalance = () => {
   const [web3, setWeb3] = useState<null | Web3>(null);
+  const [loginResponse, setLoginResponse] = useState<any>(null);
+  const [coin, setCoin] = useState<Contract | null>(null);
+  const [cdp, setCdp] = useState<Contract | null>(null);
 
-  const [balance, setBalance] = useState<string | undefined>(() => {
+  const [balance, setBalance] = useState<IBalance | null>(() => {
     const rawData = localStorage.getItem("rsk");
     if (rawData) {
       const data = JSON.parse(rawData);
@@ -88,66 +99,98 @@ const useBalance = () => {
     rLogin
       .connect()
       .then(async (response: any) => {
+        setLoginResponse(response);
         // set a local variable for the response:
         const provider = response.provider;
 
         // Use ethQuery to get the user's account and the chainId
         const web3Obj = new Web3(provider);
         setWeb3(web3Obj);
+
         const accounts = await web3Obj.eth.getAccounts();
         setAccount(accounts[0]);
-        fetchBalance(accounts[0]);
+
+        const coinContract = new web3Obj.eth.Contract(
+          Contracts.contracts.Coin.abi as any,
+          Contracts.contracts.Coin.address
+        );
+        console.log(coinContract);
+        setCoin(coinContract);
+
+        const cdpContract = new web3Obj.eth.Contract(
+          Contracts.contracts.CDPTracker.abi as any,
+          Contracts.contracts.CDPTracker.address
+        );
+        setCdp(cdpContract);
 
         // Listen to the events emitted by the wallet. If changing account, remove the listeners
         // below and connect again. If disconnect or change chains, then logout.
         provider.on("accountsChanged", (accounts: (string | null)[]) => {
           if (accounts.length === 0) {
-            return handleLogout(response);
+            return handleLogout();
           }
-          provider.removeAllListeners && provider.removeAllListeners();
+          provider?.removeAllListeners?.();
           handleLogin();
         });
         provider.on("chainChanged", () => {
           toast.error(
-            `Please make sure that you're connected to the Harmony ${
+            `Please make sure that you're connected to the RSK ${
               process.env.REACT_APP_FRONTEND_NETWORK || "Testnet"
             }`
           );
 
-          handleLogout(response);
+          handleLogout();
         });
-        provider.on("disconnect", () => handleLogout(response));
+        provider.on("disconnect", () => handleLogout());
       })
       // catch an error and if there is a message display it. Closing WalletConnect without a
       // connection will throw an error with no response, which is why we check:
-      .catch((error) => console.log("the error:", error));
+      .catch((error) => {
+        console.log(error);
+        toast.error(error);
+      });
     // .catch(err => err && err.message && setConnectResponse(`[ERROR]: ${err.message}`))
   };
 
   // handle logging out
-  const handleLogout = (response: any) => {
+  const handleLogout = useCallback(() => {
     // remove EIP 1193 listeners that were set above
-    response.provider.removeAllListeners &&
-      response.provider.removeAllListeners();
+    if (loginResponse) {
+      loginResponse.provider.removeAllListeners();
 
-    // send the disconnect method
-    response.disconnect();
+      // send the disconnect method
+      loginResponse.disconnect();
 
-    // reset the useState responses (sample app specific):
-    setAccount(null);
-    setLoggedIn(false);
-  };
+      // reset the useState responses (sample app specific):
+      setAccount(null);
+      setLoggedIn(false);
+    }
+  }, [loginResponse]);
 
   const fetchBalance = useCallback(
     async (account: string) => {
-      const bal = await web3?.eth.getBalance(account);
-      setBalance(bal);
+      const newBal: IBalance = { ...balance };
+      if (web3) {
+        const bal = await web3?.eth.getBalance(account);
+        newBal.rbtc = bal;
+      }
+      if (coin) {
+        const bal = await coin.methods.balanceOf(account).call();
+        newBal.xbtc = bal;
+      }
+      setBalance(newBal);
     },
-    [setBalance, web3]
+    [setBalance, web3, balance, coin]
   );
 
+  useEffect(() => {
+    if (account && coin) {
+      fetchBalance(account);
+    }
+  }, [account, coin]);
+
   const resetBalance = () => {
-    setBalance(undefined);
+    setBalance(null);
   };
 
   // Rehydrate
@@ -173,6 +216,8 @@ const useBalance = () => {
     handleLogin,
     handleLogout,
     web3,
+    coin,
+    cdp,
   };
 };
 

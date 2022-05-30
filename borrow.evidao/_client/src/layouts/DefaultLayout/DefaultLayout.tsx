@@ -47,12 +47,6 @@ const DefaultLayout = ({ children }: Props) => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    if (account) {
-      fetchBalance(account);
-    }
-  }, [account, fetchBalance]);
-
   return (
     <>
       <AppBar color="transparent" position="static">
@@ -93,45 +87,39 @@ const DefaultLayout = ({ children }: Props) => {
                     marginRight: "0.5rem",
                   }}
                 />
-                <Typography fontSize="0.875rem" fontWeight="bold" color="black">
-                  {web3?.utils.fromWei(balance || "0", "ether").slice(0, 8)}{" "}
+                <Typography
+                  fontSize="0.875rem"
+                  fontWeight="bold"
+                  marginRight="1rem"
+                >
+                  {web3?.utils
+                    .fromWei(balance?.xbtc || "0", "ether")
+                    .slice(0, 8)}{" "}
+                  <small>xBTC</small>
+                </Typography>
+                <Typography fontSize="0.875rem" fontWeight="bold">
+                  {web3?.utils
+                    .fromWei(balance?.rbtc || "0", "ether")
+                    .slice(0, 8)}{" "}
                   <small>rBTC</small>
                 </Typography>
               </Box>
             )}
-            <Button
-              component={RouterLink}
-              to="/lend"
-              variant="contained"
-              sx={{
-                display: "flex",
-                textDecoration: "none",
-                marginRight: "1.5rem",
-              }}
-            >
-              Lend
-            </Button>
-            <Button
-              component={RouterLink}
-              to="/borrow"
-              variant="contained"
-              color="secondary"
-              sx={{
-                display: "flex",
-                textDecoration: "none",
-                marginRight: "1.5rem",
-              }}
-            >
-              Borrow
-            </Button>
             <div>
-              <IconButton onClick={handleMenu}>
-                {account ? (
-                  <MdOutlineAccountCircle />
-                ) : (
-                  <MdAccountBalanceWallet />
-                )}
-              </IconButton>
+              <Button
+                variant="contained"
+                sx={{ borderRadius: "24px" }}
+                endIcon={
+                  account ? (
+                    <MdOutlineAccountCircle />
+                  ) : (
+                    <MdAccountBalanceWallet />
+                  )
+                }
+                onClick={handleMenu}
+              >
+                {account ? truncateString(account) : "Connect your wallet"}
+              </Button>
               {account && (
                 <Menu
                   id="menu-appbar"
@@ -142,9 +130,7 @@ const DefaultLayout = ({ children }: Props) => {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>
-                    {truncateString(account)}
-                  </MenuItem>
+                  <MenuItem onClick={handleClose}>Copy Address</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               )}
@@ -157,6 +143,8 @@ const DefaultLayout = ({ children }: Props) => {
           paddingTop: "3rem",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           minHeight: "calc(100vh - 64px)",
         }}
       >
