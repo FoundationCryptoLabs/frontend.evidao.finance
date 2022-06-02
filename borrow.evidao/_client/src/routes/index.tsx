@@ -1,4 +1,5 @@
 import Homepage from "pages/Homepage/Homepage";
+import LoginFallback from "../pages/LoginFallback/LoginFallback";
 
 interface IRoute {
   url: string;
@@ -9,12 +10,12 @@ interface IRoute {
 export const routeList: IRoute[] = [
   {
     url: "/",
-    Component: Homepage,
+    Component: LoginFallback,
     protected: false,
   },
   // PROTECTED ROUTE
   {
-    url: "/app",
+    url: "/borrow",
     Component: Homepage,
     protected: true,
   },

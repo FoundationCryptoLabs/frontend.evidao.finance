@@ -10,6 +10,7 @@ import { RSKProvider } from "context/rskContext";
 import "./App.css";
 import { CssBaseline } from "@mui/material";
 import DefaultLayout from "layouts/DefaultLayout/DefaultLayout";
+import { useRSK } from "./context/rskContext";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
 }
 
 const AppContent = () => {
+  const { account } = useRSK();
   return (
     <BrowserRouter>
       <Routes>
@@ -35,8 +37,10 @@ const AppContent = () => {
               path={route.url}
               element={
                 route.protected ? (
-                  <ProtectedRoute isAuth={false}>
-                    <Component />
+                  <ProtectedRoute isAuth={!!account}>
+                    <DefaultLayout>
+                      <Component />
+                    </DefaultLayout>
                   </ProtectedRoute>
                 ) : (
                   <DefaultLayout>

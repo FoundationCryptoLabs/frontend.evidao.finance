@@ -35,11 +35,11 @@ const rLogin = new RLogin({
 type RSKProviderProps = { children: React.ReactNode };
 
 interface IRSKContext {
-  account: string | undefined;
+  account: string | null;
   balance: IBalance | null;
   fetchBalance: (account: string) => Promise<void>;
   resetBalance: () => void;
-  handleLogin: () => void;
+  handleLogin: () => Promise<void>;
   handleLogout: (response: any) => void;
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,7 +77,13 @@ const useBalance = () => {
   const [coin, setCoin] = useState<Contract | null>(null);
   const [cdp, setCdp] = useState<Contract | null>(null);
 
-  const [safeData, setSafeData] = useState<ISafeData | null>(null);
+  const [safeData, setSafeData] = useState<ISafeData | null>(() => {
+    const rawData = localStorage.getItem("rsk");
+    if (rawData) {
+      const data = JSON.parse(rawData);
+      return data.safeData ?? null;
+    }
+  });
 
   const [balance, setBalance] = useState<IBalance | null>(() => {
     const rawData = localStorage.getItem("rsk");
@@ -87,14 +93,7 @@ const useBalance = () => {
     }
   });
 
-  const [account, setAccount] = useState(() => {
-    const rawData = localStorage.getItem("rsk");
-    if (rawData) {
-      const data = JSON.parse(rawData);
-      return data.acount;
-    }
-    return false;
-  });
+  const [account, setAccount] = useState<string | null>(null);
 
   const [loggedIn, setLoggedIn] = useState(() => {
     const rawData = localStorage.getItem("rsk");
@@ -106,59 +105,57 @@ const useBalance = () => {
   });
 
   // Use the rLogin instance to connect to the provider
-  const handleLogin = () => {
-    rLogin
-      .connect()
-      .then(async (response: any) => {
-        setLoginResponse(response);
-        // set a local variable for the response:
-        const provider = response.provider;
+  const handleLogin = async () => {
+    try {
+      const response = await rLogin.connect();
+      setLoginResponse(response);
+      // set a local variable for the response:
+      const provider = response.provider;
 
-        // Use ethQuery to get the user's account and the chainId
-        const web3Obj = new Web3(provider);
-        setWeb3(web3Obj);
+      // Use ethQuery to get the user's account and the chainId
+      const web3Obj = new Web3(provider);
+      setWeb3(web3Obj);
 
-        const accounts = await web3Obj.eth.getAccounts();
-        setAccount(accounts[0]);
+      const accounts = await web3Obj.eth.getAccounts();
+      setAccount(accounts[0]);
 
-        const coinContract = new web3Obj.eth.Contract(
-          Contracts.contracts.Coin.abi as any,
-          Contracts.contracts.Coin.address
+      const coinContract = new web3Obj.eth.Contract(
+        Contracts.contracts.Coin.abi as any,
+        Contracts.contracts.Coin.address
+      );
+      setCoin(coinContract);
+
+      const cdpContract = new web3Obj.eth.Contract(
+        Contracts.contracts.CDPTracker.abi as any,
+        Contracts.contracts.CDPTracker.address
+      );
+      setCdp(cdpContract);
+
+      // Listen to the events emitted by the wallet. If changing account, remove the listeners
+      // below and connect again. If disconnect or change chains, then logout.
+      provider.on("accountsChanged", (accounts: (string | null)[]) => {
+        if (accounts.length === 0) {
+          return handleLogout();
+        }
+        provider?.removeAllListeners?.();
+        handleLogin();
+      });
+      provider.on("chainChanged", () => {
+        toast.error(
+          `Please make sure that you're connected to the RSK ${
+            process.env.REACT_APP_FRONTEND_NETWORK || "Testnet"
+          }`
         );
-        setCoin(coinContract);
 
-        const cdpContract = new web3Obj.eth.Contract(
-          Contracts.contracts.CDPTracker.abi as any,
-          Contracts.contracts.CDPTracker.address
-        );
-        setCdp(cdpContract);
-
-        // Listen to the events emitted by the wallet. If changing account, remove the listeners
-        // below and connect again. If disconnect or change chains, then logout.
-        provider.on("accountsChanged", (accounts: (string | null)[]) => {
-          if (accounts.length === 0) {
-            return handleLogout();
-          }
-          provider?.removeAllListeners?.();
-          handleLogin();
-        });
-        provider.on("chainChanged", () => {
-          toast.error(
-            `Please make sure that you're connected to the RSK ${
-              process.env.REACT_APP_FRONTEND_NETWORK || "Testnet"
-            }`
-          );
-
-          handleLogout();
-        });
-        provider.on("disconnect", () => handleLogout());
-      })
+        handleLogout();
+      });
+      provider.on("disconnect", () => handleLogout());
+      setLoggedIn(true);
+    } catch (error: any) {
       // catch an error and if there is a message display it. Closing WalletConnect without a
       // connection will throw an error with no response, which is why we check:
-      .catch((error) => {
-        console.log(error);
-        toast.error(error);
-      });
+      throw error;
+    }
     // .catch(err => err && err.message && setConnectResponse(`[ERROR]: ${err.message}`))
   };
 
@@ -170,11 +167,11 @@ const useBalance = () => {
 
       // send the disconnect method
       loginResponse.disconnect();
-
-      // reset the useState responses (sample app specific):
-      setAccount(null);
-      setLoggedIn(false);
     }
+    // reset the useState responses (sample app specific):
+    setAccount(null);
+    setLoggedIn(false);
+    localStorage.removeItem("rsk");
   }, [loginResponse]);
 
   const fetchBalance = useCallback(
@@ -217,14 +214,17 @@ const useBalance = () => {
   useEffect(() => {
     const rawData = localStorage.getItem("rsk");
     if (rawData) {
-      // const data = JSON.parse(rawData);
+      const data = JSON.parse(rawData);
     }
   }, []);
 
   // Write to localstorage on state change
   useEffect(() => {
-    localStorage.setItem("rsk", JSON.stringify({ balance, loggedIn, account }));
-  }, [balance, loggedIn, account]);
+    localStorage.setItem(
+      "rsk",
+      JSON.stringify({ balance, loggedIn, account, safeData })
+    );
+  }, [balance, loggedIn, account, safeData]);
 
   return {
     account,

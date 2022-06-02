@@ -17,8 +17,9 @@ import logoImg from "assets/images/xbtc_logo.svg";
 import { useRSK } from "context/rskContext";
 import React, { useCallback, useEffect, useState } from "react";
 import { MdAccountBalanceWallet, MdOutlineAccountCircle } from "react-icons/md";
-import { Link as RouterLink, Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { truncateString } from "utils";
 
 type Props = {
@@ -26,26 +27,44 @@ type Props = {
 };
 
 const DefaultLayout = ({ children }: Props) => {
-  const { handleLogout, handleLogin, balance, fetchBalance, account, web3 } =
+  const { handleLogout, handleLogin, balance, account, web3, loggedIn } =
     useRSK();
 
-  const [infoOpen, setInfoOpen] = useState(false);
+  const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [firstLogin, setFirstLogin] = useState(false);
 
   const handleMenu = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       if (account) {
         setAnchorEl(event.currentTarget);
       } else {
+        setFirstLogin(true);
         handleLogin();
       }
     },
-    [account, handleLogin]
+    [account, handleLogin, navigate, setFirstLogin]
   );
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (account) {
+      navigate("/borrow");
+    }
+  }, [navigate, account]);
+
+  useEffect(() => {
+    if (loggedIn && !account) {
+      // console.log(firstLogin);
+      handleLogin().then(() => {
+        toast.success("Automatically logged you in");
+      });
+    }
+  }, [loggedIn, account]);
 
   return (
     <>
@@ -152,34 +171,7 @@ const DefaultLayout = ({ children }: Props) => {
       >
         {children ?? <Outlet />}
       </Container>
-      <Dialog open={infoOpen}>
-        <DialogTitle>Add the Metamask wallet extension</DialogTitle>
-        <DialogContent>
-          <Typography mb="1rem">
-            It seems like you don't have the{" "}
-            <a target=" __blank" href="https://metamask.io/">
-              Metamask Wallet extension
-            </a>{" "}
-            installed in your browser.
-          </Typography>
-          <Typography mb="1rem">
-            Once you have added the extension to your browser, connect your
-            wallet using the button in the top right of the menu bar.
-          </Typography>
-          <Typography mb="1rem">
-            This will allow you to trustlessly login and begin using the app.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setInfoOpen(false)}
-            variant="contained"
-            color="primary"
-          >
-            Got It!
-          </Button>
-        </DialogActions>
-      </Dialog>
+
       <ToastContainer />
     </>
   );
