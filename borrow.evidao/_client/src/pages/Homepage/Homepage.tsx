@@ -2,6 +2,7 @@ import React from "react";
 import TakeDebt from "components/TakeDebt/TakeDebt";
 import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
 import Lend from "components/Lend/Lend";
+import InfoCard from "components/InfoCard/InfoCard";
 
 type Props = {};
 
@@ -13,14 +14,16 @@ const Homepage = (props: Props) => {
   };
   return (
     <>
+      <Box marginY="2rem">
+        <InfoCard title="Lorem Ipsum" data="1.156" />
+      </Box>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
         }}
-        marginBottom="2rem"
       >
-        <Typography variant="h5">Borrow</Typography>
+        <Typography variant="h5">Lend</Typography>
         <Switch
           sx={{
             "& .Mui-checked": {
@@ -30,7 +33,7 @@ const Homepage = (props: Props) => {
           checked={checked}
           onChange={handleSwitch}
         />
-        <Typography variant="h5">Lend</Typography>
+        <Typography variant="h5">Borrow</Typography>
       </Box>
       {checked ? <TakeDebt /> : <Lend />}
     </>

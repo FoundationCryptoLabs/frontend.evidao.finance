@@ -28,11 +28,19 @@ const theme = createTheme({
 
 theme.components = {
   ...theme.components,
-  MuiPaper: {
+  MuiCard: {
     styleOverrides: {
       root: {
-        padding: "1rem 2rem 0.5rem 2rem",
+        padding: "1rem 1rem 0.5rem 1rem",
         border: `3px solid ${theme.palette.divider}`,
+      },
+    },
+  },
+  MuiCardActions: {
+    styleOverrides: {
+      root: {
+        display: "flex",
+        justifyContent: "center",
       },
     },
   },
@@ -49,12 +57,26 @@ theme.components = {
         // "label + &": {
         //   marginTop: 2,
         // },
+        border: `2px solid ${theme.palette.divider}`,
+        outline: "none",
         "& .MuiInputBase-input": {
           borderRadius: 4,
-          position: "relative",
-          border: `2px solid ${theme.palette.divider}`,
           fontSize: 16,
           padding: "12px 18px",
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+          border: 0,
+        },
+      },
+    },
+  },
+  MuiInputAdornment: {
+    styleOverrides: {
+      root: {
+        "&>p": {
+          color: theme.palette.text.primary,
+          fontWeight: "bold",
+          fontSize: "0.75rem",
         },
       },
     },

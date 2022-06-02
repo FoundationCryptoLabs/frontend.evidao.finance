@@ -143,7 +143,8 @@ const DefaultLayout = ({ children }: Props) => {
           paddingTop: "3rem",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
+          gap: 4,
           alignItems: "center",
           minHeight: "calc(100vh - 64px)",
         }}
