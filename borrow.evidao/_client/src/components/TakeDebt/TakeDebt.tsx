@@ -1,4 +1,6 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
+import { useRSK } from "../../context/rskContext";
+import { useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,11 +14,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { toWei } from "web3-utils";
 
 type Props = {};
 
 const TakeDebt = (props: Props) => {
-  const [val, setVal] = useState("");
+  const [collVal, setCollVal] = useState("");
+  const { cdp, account, getUserSafeData, fetchBalance } = useRSK();
+
+  const handleSubmit = async () => {
+    if (cdp && account) {
+      const res = await cdp.methods.takeDebt(toWei(collVal, "ether"))?.send({
+        from: account,
+      });
+      await getUserSafeData();
+      await fetchBalance(account);
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -27,32 +42,6 @@ const TakeDebt = (props: Props) => {
     >
       <Card elevation={4} sx={{ minWidth: "40%" }}>
         <CardContent>
-          {/* <Typography align="center" variant="h4" marginBottom="1rem">
-            Borrow
-          </Typography>
-          <Typography marginBottom="0.5rem">Amount to borrow</Typography> */}
-          <TextField
-            type="number"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">rBTC</InputAdornment>
-              ),
-            }}
-            value={val}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              setVal(event.currentTarget.value);
-            }}
-            placeholder="Enter collateral amount to deposit"
-            fullWidth
-          />
-        </CardContent>
-        <CardActions>
-          <Button>Deposit Collateral</Button>
-        </CardActions>
-      </Card>
-
-      <Card elevation={4} sx={{ minWidth: "40%" }}>
-        <CardContent>
           <TextField
             type="number"
             InputProps={{
@@ -60,9 +49,9 @@ const TakeDebt = (props: Props) => {
                 <InputAdornment position="end">xBTC</InputAdornment>
               ),
             }}
-            value={val}
+            value={collVal}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              setVal(event.currentTarget.value);
+              setCollVal(event.currentTarget.value);
             }}
             placeholder="Enter amount to borrow"
             fullWidth
@@ -74,7 +63,7 @@ const TakeDebt = (props: Props) => {
             justifyContent: "center",
           }}
         >
-          <Button>Take Debt</Button>
+          <Button onClick={handleSubmit}>Take Debt</Button>
         </CardActions>
       </Card>
     </Box>

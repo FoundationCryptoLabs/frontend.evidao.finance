@@ -46,6 +46,8 @@ interface IRSKContext {
   web3: Web3 | null;
   coin: Contract | null;
   cdp: Contract | null;
+  safeData: ISafeData | null;
+  getUserSafeData: () => Promise<void>;
 }
 interface IBalance {
   rbtc?: string;
@@ -62,17 +64,26 @@ export const RSKProvider = ({ children }: RSKProviderProps) => {
   return <RSKContext.Provider value={value}>{children}</RSKContext.Provider>;
 };
 
+interface ISafeData {
+  collateral: number;
+  debtIssued: number;
+  // globalDebt: number;
+  // rate: number;
+}
+
 const useBalance = () => {
   const [web3, setWeb3] = useState<null | Web3>(null);
   const [loginResponse, setLoginResponse] = useState<any>(null);
   const [coin, setCoin] = useState<Contract | null>(null);
   const [cdp, setCdp] = useState<Contract | null>(null);
 
+  const [safeData, setSafeData] = useState<ISafeData | null>(null);
+
   const [balance, setBalance] = useState<IBalance | null>(() => {
     const rawData = localStorage.getItem("rsk");
     if (rawData) {
       const data = JSON.parse(rawData);
-      return data.balance ?? null;
+      return data.balance ?? { xbtc: "0", rbtc: "0" };
     }
   });
 
@@ -114,7 +125,6 @@ const useBalance = () => {
           Contracts.contracts.Coin.abi as any,
           Contracts.contracts.Coin.address
         );
-        console.log(coinContract);
         setCoin(coinContract);
 
         const cdpContract = new web3Obj.eth.Contract(
@@ -183,6 +193,16 @@ const useBalance = () => {
     [setBalance, web3, balance, coin]
   );
 
+  const getUserSafeData = useCallback(async () => {
+    if (cdp && account) {
+      const collateral: number = await cdp.methods.collateral(account).call();
+      const debtIssued: number = await cdp.methods.debtIssued(account).call();
+      // const rate: number = await cdp.methods.lastAR().call();
+      // const globalDebt: number = await cdp.methods.globalDebt().call();
+      setSafeData({ collateral, debtIssued });
+    }
+  }, [cdp, account]);
+
   useEffect(() => {
     if (account && coin) {
       fetchBalance(account);
@@ -218,6 +238,8 @@ const useBalance = () => {
     web3,
     coin,
     cdp,
+    safeData,
+    getUserSafeData,
   };
 };
 

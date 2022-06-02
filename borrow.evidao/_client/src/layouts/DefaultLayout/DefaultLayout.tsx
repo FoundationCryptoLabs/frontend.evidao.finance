@@ -139,6 +139,7 @@ const DefaultLayout = ({ children }: Props) => {
         </Toolbar>
       </AppBar>
       <Container
+        maxWidth="xl"
         sx={{
           paddingTop: "3rem",
           display: "flex",

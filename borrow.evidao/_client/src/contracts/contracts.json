@@ -3,7 +3,7 @@
   "chainId": "1666700000",
   "contracts": {
     "CDPTracker": {
-      "address": "0x4ED861F4fcd405e33342a7d7c6FD5A8F1bAdd5A9",
+      "address": "0xc4aed98e77fcd523ee6506d18efb39963029c873",
       "abi": [
         {
           "inputs": [
@@ -46,19 +46,6 @@
           ],
           "name": "RemoveAuthorization",
           "type": "event"
-        },
-        {
-          "inputs": [],
-          "name": "INIT",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
         },
         {
           "inputs": [
@@ -138,106 +125,6 @@
           "type": "function"
         },
         {
-          "inputs": [],
-          "name": "globalDebt",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            },
-            {
-              "internalType": "string",
-              "name": "entry1",
-              "type": "string"
-            }
-          ],
-          "name": "gsafes",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "initTime",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "treasury",
-              "type": "address"
-            }
-          ],
-          "name": "issueSurplus",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "lastAR",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "newRATE",
-              "type": "uint256"
-            }
-          ],
-          "name": "newAR",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
           "inputs": [
             {
               "internalType": "uint256",
@@ -293,58 +180,11 @@
           "inputs": [
             {
               "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "safes",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "collateral",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "debtIssued",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "updateTime",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "originRate",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
               "name": "STABLE",
               "type": "address"
             }
           ],
           "name": "setCoin",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "StabilityFee",
-              "type": "uint256"
-            }
-          ],
-          "name": "setInterest",
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"
@@ -361,107 +201,11 @@
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "updateAccumulatedRate0",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "updateAccumulatedRate1",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "newDebt",
-              "type": "uint256"
-            }
-          ],
-          "name": "updateGlobalDebt",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            }
-          ],
-          "name": "updateUserDebt",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            }
-          ],
-          "name": "updateUserDebt1",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "user",
-              "type": "address"
-            }
-          ],
-          "name": "updateUserDebt2",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
         }
       ]
     },
     "Coin": {
-      "address": "0xD0487627b49748703F0D359dc7a1bD70f7c7e4A8",
+      "address": "0x3bf9e5bb65c580fbe1936bd7edd60aaad4f38eb0",
       "abi": [
         {
           "inputs": [
