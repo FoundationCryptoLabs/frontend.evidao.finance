@@ -172,7 +172,7 @@ const DefaultLayout = ({ children }: Props) => {
         {children ?? <Outlet />}
       </Container>
 
-      <ToastContainer />
+      <ToastContainer autoClose={3000} />
     </>
   );
 };

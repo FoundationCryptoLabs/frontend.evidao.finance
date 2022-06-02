@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { toWei } from "web3-utils";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -19,10 +20,21 @@ const Lend = (props: Props) => {
 
   const handleSubmit = async () => {
     if (cdp && account) {
-      const res = await cdp?.methods.depositCollateral()?.send({
-        from: account,
-        value: toWei(collVal, "ether"),
-      });
+      const res = await toast.promise(
+        cdp?.methods.depositCollateral()?.send({
+          from: account,
+          value: toWei(collVal, "ether"),
+        }),
+        {
+          pending: "Running [[DepositCollateral]]",
+          success: "Success!",
+          error: {
+            render: (err: any) => {
+              return err.data?.message || "Something went wrong";
+            },
+          },
+        }
+      );
       await getUserSafeData();
       await fetchBalance(account);
     }

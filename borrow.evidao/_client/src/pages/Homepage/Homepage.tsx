@@ -12,6 +12,7 @@ import InfoCard from "components/InfoCard/InfoCard";
 import { useRSK } from "context/rskContext";
 import { fromWei, toWei } from "web3-utils";
 import { isCatchClause } from "typescript";
+import { toast } from "react-toastify";
 
 const Homepage = () => {
   const [checked, setChecked] = useState(false);
@@ -29,27 +30,24 @@ const Homepage = () => {
 
   // Contract Interactions
 
-  const handleRemoveCollateral = async (value: string) => {
+  const RemoveCollateral = async (value: string) => {
     const res = await cdp?.methods
       .removeCollateral(toWei(value, "ether"))
       ?.send({
         from: account,
       });
-    console.log(res);
   };
 
-  const handleReturnDebt = async (value: string) => {
+  const ReturnDebt = async (value: string) => {
     const res = await cdp?.methods.returnDebt(toWei(value, "ether"))?.send({
       from: account,
     });
-    console.log(res);
   };
 
-  const handleRedeemCoins = async (value: string) => {
+  const RedeemCoins = async (value: string) => {
     const res = await cdp?.methods.redeemCoins(toWei(value, "ether"))?.send({
       from: account,
     });
-    console.log(res);
   };
 
   const contractSubmitWrapper =
@@ -57,7 +55,15 @@ const Homepage = () => {
       if (!cdp || !account) return;
       setLoading(true);
       try {
-        await cb(val);
+        await toast.promise(cb(val), {
+          pending: `Running [[${cb.name}]]`,
+          success: "Success!",
+          error: {
+            render: (err: any) => {
+              return err.data?.message || "Something went wrong";
+            },
+          },
+        });
         await getUserSafeData();
         await fetchBalance(account);
       } catch (err) {
@@ -84,7 +90,7 @@ const Homepage = () => {
             data={fromWei(`${safeData.collateral}`, "ether")}
             unit="rBTC"
             actionText="Remove Collateral"
-            onActionClick={contractSubmitWrapper(handleRemoveCollateral)}
+            onActionClick={contractSubmitWrapper(RemoveCollateral)}
           />
           <InfoCard
             bgColor="#2980b9"
@@ -92,7 +98,7 @@ const Homepage = () => {
             data={fromWei(`${safeData.debtIssued}`, "ether")}
             unit="xBTC"
             actionText="Return Debt"
-            onActionClick={contractSubmitWrapper(handleReturnDebt)}
+            onActionClick={contractSubmitWrapper(ReturnDebt)}
           />
           <InfoCard
             bgColor="#27ae60"
@@ -106,7 +112,7 @@ const Homepage = () => {
             data={fromWei(`${balance.xbtc}`, "ether")}
             unit="xBTC"
             actionText="Redeem for rBTC"
-            onActionClick={contractSubmitWrapper(handleRedeemCoins)}
+            onActionClick={contractSubmitWrapper(RedeemCoins)}
           />
         </Box>
       ) : (
