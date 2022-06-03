@@ -106,7 +106,7 @@ const DefaultLayout = ({ children }: Props) => {
                     marginRight: "0.5rem",
                   }}
                 />
-                <Typography
+                {/* <Typography
                   fontSize="0.875rem"
                   fontWeight="bold"
                   marginRight="1rem"
@@ -115,7 +115,7 @@ const DefaultLayout = ({ children }: Props) => {
                     .fromWei(balance?.xbtc || "0", "ether")
                     .slice(0, 8)}{" "}
                   <small>xBTC</small>
-                </Typography>
+                </Typography> */}
                 <Typography fontSize="0.875rem" fontWeight="bold">
                   {web3?.utils
                     .fromWei(balance?.rbtc || "0", "ether")
