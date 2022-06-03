@@ -34,7 +34,10 @@ const TakeDebt = (props: Props) => {
           success: "Success!",
           error: {
             render: (err: any) => {
-              return err.data?.message || "Something went wrong";
+              console.log(err);
+              return (
+                err.data?.message?.split?.("\n")?.[0] || "Something went wrong"
+              );
             },
           },
         }
