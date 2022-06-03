@@ -9,7 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import { AiOutlineSwapRight } from "react-icons/ai";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, MouseEvent, useState } from "react";
+import { MdInfoOutline } from "react-icons/md";
 
 interface Props extends CardProps {
   title: string;
@@ -18,6 +19,9 @@ interface Props extends CardProps {
   bgColor: string;
   actionText?: React.ReactNode;
   onActionClick?: (value: string) => void;
+  info?: string;
+  refreshLabel?: string;
+  onRefresh?: (evt: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const InfoCard = ({
@@ -25,6 +29,7 @@ const InfoCard = ({
   data,
   unit,
   bgColor,
+  info,
   actionText,
   onActionClick,
   ...rest
@@ -93,27 +98,35 @@ const InfoCard = ({
             </Button>
           </Box>
           {!firstClick && (
-            <TextField
-              type="number"
-              sx={{
-                marginBottom: 1,
-              }}
-              InputProps={
-                unit
-                  ? {
-                      endAdornment: (
-                        <InputAdornment position="end">{unit}</InputAdornment>
-                      ),
-                    }
-                  : undefined
-              }
-              value={value}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                setValue(event.currentTarget.value);
-              }}
-              placeholder="Amount"
-              fullWidth
-            />
+            <>
+              <TextField
+                type="number"
+                sx={{
+                  marginBottom: 1,
+                }}
+                InputProps={
+                  unit
+                    ? {
+                        endAdornment: (
+                          <InputAdornment position="end">{unit}</InputAdornment>
+                        ),
+                      }
+                    : undefined
+                }
+                value={value}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  setValue(event.currentTarget.value);
+                }}
+                placeholder="Amount"
+                fullWidth
+              />
+              {info && (
+                <Box display="flex" alignItems="center" gap={1}>
+                  <MdInfoOutline />
+                  <Typography fontSize="0.75rem">{info}</Typography>
+                </Box>
+              )}
+            </>
           )}
         </>
       )}
