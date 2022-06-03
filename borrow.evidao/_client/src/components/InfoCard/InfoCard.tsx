@@ -3,14 +3,15 @@ import {
   Button,
   Card,
   CardProps,
+  IconButton,
   InputAdornment,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { AiOutlineSwapRight } from "react-icons/ai";
 import React, { ChangeEvent, MouseEvent, useState } from "react";
-import { MdInfoOutline } from "react-icons/md";
+import { AiOutlineCloseCircle, AiOutlineSwapRight } from "react-icons/ai";
+import { MdInfoOutline, MdRefresh } from "react-icons/md";
 
 interface Props extends CardProps {
   title: string;
@@ -32,6 +33,8 @@ const InfoCard = ({
   info,
   actionText,
   onActionClick,
+  refreshLabel,
+  onRefresh,
   ...rest
 }: Props) => {
   const [firstClick, setFirstClick] = useState(true);
@@ -41,6 +44,9 @@ const InfoCard = ({
     <Card
       {...rest}
       sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
         backgroundColor: bgColor,
         borderRadius: "12px",
         transition: "height 0.5s ease",
@@ -51,7 +57,7 @@ const InfoCard = ({
         <Typography fontWeight="bold" sx={{}}>
           {title}
         </Typography>
-        <Box display="flex" alignItems="baseline" gap={1} marginBottom={2}>
+        <Box display="flex" alignItems="baseline" gap={1}>
           <Tooltip title={`${data} ${unit}`}>
             <Typography fontSize="2rem" fontWeight="bold">
               {data.slice(0, 8)}
@@ -61,6 +67,20 @@ const InfoCard = ({
             {unit}
           </Typography>
         </Box>
+        {refreshLabel && (
+          <Button
+            sx={{
+              color: "text.primary",
+              textTransform: "capitalize",
+              fontSize: "0.75rem",
+              padding: 0,
+            }}
+            endIcon={<MdRefresh />}
+            onClick={onRefresh}
+          >
+            {refreshLabel}
+          </Button>
+        )}
       </Box>
       {actionText && (
         <>
@@ -104,15 +124,21 @@ const InfoCard = ({
                 sx={{
                   marginBottom: 1,
                 }}
-                InputProps={
-                  unit
-                    ? {
-                        endAdornment: (
-                          <InputAdornment position="end">{unit}</InputAdornment>
-                        ),
-                      }
-                    : undefined
-                }
+                InputProps={{
+                  endAdornment: unit ? (
+                    <InputAdornment position="end">{unit}</InputAdornment>
+                  ) : undefined,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        onClick={() => setFirstClick(true)}
+                        sx={{ margin: 0, padding: 0, fontSize: "1.25rem" }}
+                      >
+                        <AiOutlineCloseCircle />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 value={value}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   setValue(event.currentTarget.value);
