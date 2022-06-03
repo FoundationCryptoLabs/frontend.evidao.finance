@@ -51,12 +51,13 @@ const Homepage = () => {
   };
 
   const contractSubmitWrapper =
-    (cb: (val: string) => Promise<void>) => async (val: string) => {
+    (cb: (val: string) => Promise<void>, name: string) =>
+    async (val: string) => {
       if (!cdp || !account) return;
       setLoading(true);
       try {
         await toast.promise(cb(val), {
-          pending: `Running [[${cb.name}]]`,
+          pending: `Running [[${name}]]`,
           success: "Success!",
           error: {
             render: (err: any) => {
@@ -90,7 +91,10 @@ const Homepage = () => {
             data={fromWei(`${safeData.collateral}`, "ether")}
             unit="rBTC"
             actionText="Remove Collateral"
-            onActionClick={contractSubmitWrapper(RemoveCollateral)}
+            onActionClick={contractSubmitWrapper(
+              RemoveCollateral,
+              "RemoveCollateral"
+            )}
           />
           <InfoCard
             bgColor="#2980b9"
@@ -98,7 +102,7 @@ const Homepage = () => {
             data={fromWei(`${safeData.debtIssued}`, "ether")}
             unit="xBTC"
             actionText="Return Debt"
-            onActionClick={contractSubmitWrapper(ReturnDebt)}
+            onActionClick={contractSubmitWrapper(ReturnDebt, "ReturnDebt")}
             info="Make sure to update your debt before repayment."
             refreshLabel="Update user debt"
             onRefresh={async () => {
@@ -134,7 +138,7 @@ const Homepage = () => {
             data={fromWei(`${balance.xbtc}`, "ether")}
             unit="xBTC"
             actionText="Redeem for rBTC"
-            onActionClick={contractSubmitWrapper(RedeemCoins)}
+            onActionClick={contractSubmitWrapper(RedeemCoins, "RedeemCoins")}
           />
         </Box>
       ) : (
