@@ -192,11 +192,13 @@ const useBalance = () => {
 
   const getUserSafeData = useCallback(async () => {
     if (cdp && account) {
-      const collateral: number = await cdp.methods.collateral(account).call();
-      const debtIssued: number = await cdp.methods.debtIssued(account).call();
+      // const collateral: number = await cdp.methods.collateral(account).call();
+      // const debtIssued: number = await cdp.methods.debtIssued(account).call();
+      const safe: ISafeData = await cdp.methods.safes(account).call();
       // const rate: number = await cdp.methods.lastAR().call();
       // const globalDebt: number = await cdp.methods.globalDebt().call();
-      setSafeData({ collateral, debtIssued });
+      // setSafeData({ collateral, debtIssued });
+      setSafeData({ ...safe });
     }
   }, [cdp, account]);
 

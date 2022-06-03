@@ -99,12 +99,34 @@ const Homepage = () => {
             unit="xBTC"
             actionText="Return Debt"
             onActionClick={contractSubmitWrapper(ReturnDebt)}
+            info="Make sure to update your debt before repayment."
+            refreshLabel="Update user debt"
+            onRefresh={async () => {
+              if (account) {
+                await toast.promise(
+                  cdp?.methods.updateUserDebt2(account)?.send({
+                    from: account,
+                  }),
+                  {
+                    pending: `Updating user debt`,
+                    success: "Success!",
+                    error: {
+                      render: (err: any) => {
+                        return err.data?.message || "Something went wrong";
+                      },
+                    },
+                  }
+                );
+                await getUserSafeData();
+                await fetchBalance(account);
+              }
+            }}
           />
           <InfoCard
             bgColor="#27ae60"
-            title="rBTC Balance"
+            title="Collateral Utilised"
             data={fromWei(`${balance.rbtc}`, "ether")}
-            unit="rBTC"
+            unit="%"
           />
           <InfoCard
             bgColor="#9b59b6"
