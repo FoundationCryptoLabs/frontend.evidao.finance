@@ -129,7 +129,7 @@ const Homepage = () => {
           <InfoCard
             bgColor="#27ae60"
             title="Collateral Utilised"
-            data={safeData.rate.toFixed(4)}
+            data={(safeData.rate * 100).toFixed(4)}
             unit="%"
           />
           <InfoCard
