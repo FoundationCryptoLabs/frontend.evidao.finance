@@ -125,7 +125,7 @@ const Homepage = () => {
           <InfoCard
             bgColor="#27ae60"
             title="Collateral Utilised"
-            data={fromWei(`${balance.rbtc}`, "ether")}
+            data={safeData.rate.toFixed(4)}
             unit="%"
           />
           <InfoCard

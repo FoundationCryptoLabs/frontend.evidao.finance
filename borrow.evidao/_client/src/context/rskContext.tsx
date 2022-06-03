@@ -10,6 +10,7 @@ import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import RLogin from "@rsksmart/rlogin";
 import { toast } from "react-toastify";
+import { COLLATERAL_RATIO } from "utils/constants";
 
 const rpcUrls = {
   30: "https://public-node.rsk.co",
@@ -68,7 +69,7 @@ interface ISafeData {
   collateral: number;
   debtIssued: number;
   // globalDebt: number;
-  // rate: number;
+  rate: number;
 }
 
 const useBalance = () => {
@@ -198,7 +199,9 @@ const useBalance = () => {
       // const rate: number = await cdp.methods.lastAR().call();
       // const globalDebt: number = await cdp.methods.globalDebt().call();
       // setSafeData({ collateral, debtIssued });
-      setSafeData({ ...safe });
+      const { collateral, debtIssued } = safe;
+      const rate = (debtIssued * COLLATERAL_RATIO) / (100 * collateral);
+      setSafeData({ ...safe, rate });
     }
   }, [cdp, account]);
 
